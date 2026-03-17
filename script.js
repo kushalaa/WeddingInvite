@@ -39,33 +39,47 @@ const weddingConfig = {
       id: "sangeet",
       dateLabel: "May 6",
       title: "Sangeet",
-      time: "Evening celebration",
+      time: "6:30 PM",
       description:
-        "A night of music, dance, and vibrant colors to begin the wedding weekend."
+        "A night of music, dance, and vibrant colors to begin the wedding weekend.",
+      hoverCopy:
+        "We're dancing like nobody's watching... but you definitely should be. Join us at 6:30 PM",
+      calendarStart: "20260506T183000",
+      calendarEnd: "20260506T213000"
     },
     {
       id: "engagement",
       dateLabel: "May 7",
       title: "Engagement",
-      time: "Morning ceremony",
+      time: "11:00 AM",
       description:
-        "A warm morning gathering with family and close friends to mark the engagement."
+        "A warm morning gathering with family and close friends to mark the engagement.",
+      hoverCopy: "We are making it official, witness it at 11:00 AM",
+      calendarStart: "20260507T110000",
+      calendarEnd: "20260507T133000"
     },
     {
       id: "reception",
       dateLabel: "May 7",
       title: "Reception",
-      time: "Evening celebration",
+      time: "6:30 PM onwards",
       description:
-        "An elegant reception with dinner, speeches, and a luminous evening atmosphere."
+        "An elegant reception with dinner, speeches, and a luminous evening atmosphere.",
+      hoverCopy:
+        "When the formalities fade and the celebration begins, 6:30 PM onwards.",
+      calendarStart: "20260507T183000",
+      calendarEnd: "20260507T213000"
     },
     {
       id: "wedding",
       dateLabel: "May 8",
       title: "Wedding",
-      time: "Wedding ceremony",
+      time: "10:11 AM",
       description:
-        "The wedding day itself, centered on tradition, ceremony, and a joyful gathering."
+        "The wedding day itself, centered on tradition, ceremony, and a joyful gathering.",
+      hoverCopy: "A sacred hour, quietly ours-10:11AM",
+      calendarStart: "20260508T101100",
+      calendarEnd: "20260508T131100"
     }
   ]
 };
@@ -78,13 +92,11 @@ const backgroundAudio = document.querySelector("#background-audio");
 const musicToggle = document.querySelector("#music-toggle");
 const openingSpotlight = document.querySelector("#top");
 const openingBeam = document.querySelector(".opening-beam");
-const eventsBanner = document.querySelector("#events-banner");
 const filmSection = document.querySelector("#film");
 const filmVideo = document.querySelector("#film-video");
 const ourStorySection = document.querySelector("#our-story");
 const ourStoryTitle = document.querySelector("#our-story-title");
 const storyGalleryTrack = document.querySelector("#story-gallery-track");
-const continueToInviteButton = document.querySelector("#continue-to-invite");
 const pointerTargets = document.querySelectorAll(".location-copy, .map-shell");
 const chapterLinks = document.querySelectorAll(".chapter-link");
 const teamChoices = document.querySelectorAll(".team-choice");
@@ -102,9 +114,6 @@ const countdownIds = {
 };
 let calendarUrl = "";
 let spotlightIntervalId = 0;
-let openingSequenceCompleted = false;
-let filmSequenceReady = false;
-let filmAutoArrived = false;
 let teamFlashTimeoutId = 0;
 let teamFlashRequestId = 0;
 
@@ -158,38 +167,44 @@ function applyConfig() {
   calendarDownloadLink.download = weddingConfig.calendarFileName;
   weddingConfig.events.forEach((event, index) => {
     const item = document.createElement("article");
-    item.className = "timeline-item reveal";
+    item.className = `timeline-item timeline-item--${event.id} reveal`;
     item.dataset.eventId = event.id;
     item.tabIndex = 0;
     item.innerHTML = `
-      <div class="timeline-underlay">
-        <video class="timeline-underlay-video" autoplay muted playsinline preload="auto" loop>
-          <source src="./assets/dinner-table.mp4?v=20260316-4" type="video/mp4" />
-        </video>
-        <div class="timeline-underlay-overlay"></div>
-      </div>
-      <div class="timeline-shutters" aria-hidden="true">
-        <span class="timeline-shutter timeline-shutter-full"></span>
+      <div class="timeline-aura" aria-hidden="true"></div>
+      <div class="timeline-orbit" aria-hidden="true">
+        <span class="timeline-orbit-dot timeline-orbit-dot-a"></span>
+        <span class="timeline-orbit-dot timeline-orbit-dot-b"></span>
+        <span class="timeline-orbit-dot timeline-orbit-dot-c"></span>
       </div>
       <div class="timeline-content">
         <span class="timeline-date">${event.dateLabel}</span>
         <h3>${event.title}</h3>
         <p class="timeline-time">${event.time}</p>
-        <p class="timeline-description">${event.description}</p>
-        <p class="timeline-hint">Hover to open this moment</p>
+        <p class="timeline-hover-copy">${event.hoverCopy}</p>
       </div>
     `;
-    item.addEventListener("click", () => activateEvent(index));
+    item.addEventListener("click", () => {
+      document.querySelectorAll(".timeline-item").forEach((timelineItem, itemIndex) => {
+        timelineItem.classList.toggle("is-hovered", itemIndex === index);
+      });
+    });
     item.addEventListener("keydown", (keyboardEvent) => {
       if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
         keyboardEvent.preventDefault();
-        activateEvent(index);
+        document.querySelectorAll(".timeline-item").forEach((timelineItem, itemIndex) => {
+          timelineItem.classList.toggle("is-hovered", itemIndex === index);
+        });
       }
+    });
+    item.addEventListener("mouseleave", () => {
+      item.classList.remove("is-hovered");
+    });
+    item.addEventListener("blur", () => {
+      item.classList.remove("is-hovered");
     });
     timeline.appendChild(item);
   });
-
-  activateEvent(0);
 }
 
 function uniqueOnly(value, index, array) {
@@ -211,12 +226,6 @@ function setupReveals() {
 
   document.querySelectorAll(".reveal").forEach((element) => {
     observer.observe(element);
-  });
-}
-
-function activateEvent(index) {
-  document.querySelectorAll(".timeline-item").forEach((item, itemIndex) => {
-    item.classList.toggle("is-active", itemIndex === index);
   });
 }
 
@@ -275,31 +284,16 @@ function setupSectionRail() {
   sections.forEach((section) => observer.observe(section));
 }
 
-function setupSpotlightAutoplay() {
-  let activeIndex = 0;
-
-  function restartAutoplay() {
-    window.clearInterval(spotlightIntervalId);
-    spotlightIntervalId = window.setInterval(() => {
-      activeIndex = (activeIndex + 1) % weddingConfig.events.length;
-      activateEvent(activeIndex);
-    }, 4200);
-  }
-
-  timeline.addEventListener("click", () => {
-    activeIndex = [...document.querySelectorAll(".timeline-item")].findIndex((item) =>
-      item.classList.contains("is-active")
-    );
-    restartAutoplay();
-  });
-
-  restartAutoplay();
-}
-
 function setupOpeningSequence() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const openingDelay = prefersReducedMotion ? 0 : 3000;
   let spotlightInteractive = false;
+  let wasAtTop = true;
+
+  function replayOpeningReveal() {
+    openingSpotlight.classList.remove("is-revealing");
+    void openingSpotlight.offsetWidth;
+    openingSpotlight.classList.add("is-revealing");
+  }
 
   function moveOpeningBeam(clientX, clientY) {
     if (!spotlightInteractive) {
@@ -313,58 +307,6 @@ function setupOpeningSequence() {
     const clampedY = Math.max(16, Math.min(84, y));
     openingBeam.style.left = `${clampedX}%`;
     openingBeam.style.top = `${clampedY}%`;
-  }
-
-  function scrollToFilm() {
-    filmSequenceReady = true;
-    filmAutoArrived = false;
-    filmSection.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
-    filmVideo.play().catch(() => {});
-    window.setTimeout(() => {
-      filmAutoArrived = true;
-    }, prefersReducedMotion ? 0 : 1200);
-  }
-
-  function scrollToInvitation() {
-    if (openingSequenceCompleted) {
-      return;
-    }
-
-    openingSequenceCompleted = true;
-    ourStorySection.scrollIntoView({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-      block: "start"
-    });
-  }
-
-  function maybeAdvanceFromScroll() {
-    if (!filmSequenceReady || !filmAutoArrived || openingSequenceCompleted) {
-      return;
-    }
-  }
-
-  function handleDirectionalScroll(event) {
-    if (!filmSequenceReady || !filmAutoArrived || openingSequenceCompleted) {
-      return;
-    }
-
-    const movingForward =
-      ("deltaY" in event && event.deltaY > 0) ||
-      ("key" in event &&
-        ["ArrowDown", "PageDown", " ", "Enter"].includes(event.key));
-
-    if (!movingForward) {
-      return;
-    }
-
-    const filmBounds = filmSection.getBoundingClientRect();
-    const isFilmVisible =
-      filmBounds.top < window.innerHeight * 0.45 &&
-      filmBounds.bottom > window.innerHeight * 0.45;
-
-    if (isFilmVisible) {
-      scrollToInvitation();
-    }
   }
 
   const filmVisibilityObserver = new IntersectionObserver(
@@ -381,24 +323,27 @@ function setupOpeningSequence() {
   );
 
   window.scrollTo({ top: 0, behavior: "auto" });
+  replayOpeningReveal();
   window.setTimeout(() => {
     spotlightInteractive = !prefersReducedMotion;
   }, prefersReducedMotion ? 0 : 2300);
-  window.setTimeout(scrollToFilm, openingDelay);
-  continueToInviteButton.addEventListener("click", scrollToInvitation);
   filmVisibilityObserver.observe(filmSection);
-  window.addEventListener("wheel", handleDirectionalScroll, { passive: true });
-  window.addEventListener("touchmove", maybeAdvanceFromScroll, { passive: true });
-  window.addEventListener("keydown", handleDirectionalScroll);
+  window.addEventListener(
+    "scroll",
+    () => {
+      const isAtTop = window.scrollY < 24;
+
+      if (isAtTop && !wasAtTop) {
+        replayOpeningReveal();
+      }
+
+      wasAtTop = isAtTop;
+    },
+    { passive: true }
+  );
   openingSpotlight.addEventListener("pointermove", (event) => {
     moveOpeningBeam(event.clientX, event.clientY);
   });
-
-  window.setTimeout(() => {
-    if (!openingSequenceCompleted && filmVideo.readyState < 2) {
-      scrollToInvitation();
-    }
-  }, 9000);
 }
 
 function setupOurStoryScroll() {
@@ -408,12 +353,16 @@ function setupOurStoryScroll() {
     const sectionRect = ourStorySection.getBoundingClientRect();
     const sectionHeight = Math.max(ourStorySection.offsetHeight - window.innerHeight, 1);
     const rawProgress = Math.min(Math.max(-sectionRect.top / sectionHeight, 0), 1);
-    const titleExitProgress = Math.min(rawProgress / 0.22, 1);
-    const galleryProgress = rawProgress <= 0.14 ? 0 : Math.min((rawProgress - 0.14) / 0.86, 1);
+    const titleExitProgress = Math.min(rawProgress / 0.2, 1);
+    const galleryRevealStart = 0.2;
+    const galleryProgress =
+      rawProgress <= galleryRevealStart
+        ? 0
+        : Math.min((rawProgress - galleryRevealStart) / (1 - galleryRevealStart), 1);
     const titleShift = prefersReducedMotion ? 0 : titleExitProgress * -120;
     const titleOpacity = prefersReducedMotion ? 1 : 1 - titleExitProgress;
-    const galleryOpacity = prefersReducedMotion ? 1 : Math.min(galleryProgress * 1.35, 1);
-    const galleryShift = prefersReducedMotion ? 0 : (1 - galleryOpacity) * 50;
+    const galleryOpacity = prefersReducedMotion ? 1 : Math.min(galleryProgress * 1.85, 1);
+    const galleryShift = prefersReducedMotion ? 0 : (1 - galleryProgress) * 28;
     const startOffset = Math.min(window.innerWidth * 0.18, 180);
     const travelDistance = Math.max(storyGalleryTrack.scrollWidth - window.innerWidth + startOffset, 0);
     const trackOffset = prefersReducedMotion ? 0 : startOffset - galleryProgress * travelDistance;
@@ -431,29 +380,6 @@ function setupOurStoryScroll() {
   updateStoryMotion();
   window.addEventListener("scroll", updateStoryMotion, { passive: true });
   window.addEventListener("resize", updateStoryMotion);
-}
-
-function setupEventsBannerScroll() {
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function updateEventsBanner() {
-    const rect = eventsBanner.getBoundingClientRect();
-    const totalTravel = window.innerHeight + rect.height;
-    const reveal = prefersReducedMotion
-      ? 1
-      : Math.min(Math.max((window.innerHeight - rect.top) / totalTravel, 0), 1);
-    const easedReveal = reveal * 0.82;
-    const shift = 44 * easedReveal;
-    const opacity = 1 - reveal * 0.08;
-
-    eventsBanner.style.setProperty("--events-banner-shift", `${shift}vw`);
-    eventsBanner.style.setProperty("--events-banner-opacity", `${opacity}`);
-    eventsBanner.style.setProperty("--events-banner-open", `${easedReveal}`);
-  }
-
-  updateEventsBanner();
-  window.addEventListener("scroll", updateEventsBanner, { passive: true });
-  window.addEventListener("resize", updateEventsBanner);
 }
 
 function setupCountdown() {
@@ -594,32 +520,11 @@ function createPetals() {
 }
 
 function createCalendarFile() {
-  const events = [
-    createCalendarEvent(
-      "20260506T190000",
-      "20260506T230000",
-      "Sangeet",
-      "Sangeet celebration"
-    ),
-    createCalendarEvent(
-      "20260507T100000",
-      "20260507T120000",
-      "Engagement",
-      "Morning engagement ceremony"
-    ),
-    createCalendarEvent(
-      "20260507T190000",
-      "20260507T230000",
-      "Reception",
-      "Evening reception"
-    ),
-    createCalendarEvent(
-      "20260508T110000",
-      "20260508T150000",
-      "Wedding",
-      "Wedding ceremony"
+  const events = weddingConfig.events
+    .map((event) =>
+      createCalendarEvent(event.calendarStart, event.calendarEnd, event.title, event.hoverCopy)
     )
-  ].join("\n");
+    .join("\n");
 
   const calendar = [
     "BEGIN:VCALENDAR",
@@ -654,10 +559,8 @@ setupPointerGlow();
 setupParallaxCards();
 setupScrollProgress();
 setupSectionRail();
-setupSpotlightAutoplay();
 setupCountdown();
 setupAudioToggle();
-setupEventsBannerScroll();
 setupOurStoryScroll();
 setupTeamChoice();
 createPetals();
