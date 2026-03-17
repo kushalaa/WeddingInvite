@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invite</title>
+    <meta
+      name="description"
+      content="A cinematic wedding invitation with event details, directions, and interactive motion."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=20260316-7" />
+  </head>
+  <body>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="pointer-glow"></div>
+    <div class="background-orb orb-left"></div>
+    <div class="background-orb orb-right"></div>
+    <div class="petal-field" id="petal-field" aria-hidden="true"></div>
+    <div class="grain"></div>
+    <button class="music-toggle" id="music-toggle" type="button" aria-pressed="false">
+      Sound Off
+    </button>
+    <audio id="background-audio" loop preload="auto">
+      <source src="./assets/sun-goes-down.mp3?v=20260316-5" type="audio/mpeg" />
+    </audio>
+    <nav class="chapter-rail" aria-label="Page sections">
+      <a class="chapter-link is-active" href="#top" data-section="top">Intro</a>
+      <a class="chapter-link" href="#film" data-section="film">Invite</a>
+      <a class="chapter-link" href="#our-story" data-section="our-story">Story</a>
+      <a class="chapter-link" href="#dates" data-section="dates">Countdown</a>
+      <a class="chapter-link" href="#schedule" data-section="schedule">Events</a>
+      <a class="chapter-link" href="#teams" data-section="teams">Teams</a>
+      <a class="chapter-link" href="#location" data-section="location">Venue</a>
+      <a class="chapter-link" href="#events-banner" data-section="events-banner">Curtain</a>
+    </nav>
+
+    <section class="opening-spotlight" id="top">
+      <div class="opening-beam"></div>
+      <div class="opening-spotlight-inner reveal visible">
+        <p class="opening-kicker">The Wedding of</p>
+        <h1 class="opening-monogram" aria-label="Sharath and Kushalaa">
+          <span class="opening-letter">Sharath</span>
+          <span class="opening-letter opening-ampersand">and</span>
+          <span class="opening-letter">Kushalaa</span>
+        </h1>
+        <p class="opening-subtitle">May 8th 2026</p>
+        <p class="opening-note">
+          We are so excited to celebrate and share our love, happiness and
+          lifelong memories with you
+        </p>
+      </div>
+    </section>
+
+    <section class="film-section" id="film">
+      <div class="film-copy">
+        <p class="eyebrow">The Invite</p>
+        <h2>
+          With joyful hearts,<br />
+          we invite you to celebrate our wedding as we promise a lifetime of
+          love and adventure.
+        </h2>
+        <p>Your presence would mean the world to us!</p>
+        <button class="button button-secondary" id="continue-to-invite" type="button">
+          Continue to Our Story
+        </button>
+      </div>
+      <div class="film-media">
+        <video
+          class="film-video"
+          id="film-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          loop
+        >
+          <source src="./assets/first-scene.mp4?v=20260316-5" type="video/mp4" />
+        </video>
+        <div class="film-overlay"></div>
+      </div>
+    </section>
+
+    <section class="our-story-section" id="our-story">
+      <div class="our-story-sticky">
+        <div class="our-story-header">
+          <p class="eyebrow">Chapter One</p>
+          <h2 class="our-story-title" id="our-story-title">Our Story</h2>
+          <p class="our-story-copy">
+            Scroll downward and the memories move across the page. Replace these
+            placeholders with your own images later.
+          </p>
+        </div>
+        <div class="story-gallery-shell">
+          <svg
+            class="story-thread"
+            viewBox="0 0 1600 360"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              class="story-thread-path"
+              d="M20 188 C120 120, 210 120, 300 180 S470 250, 560 190 S730 110, 820 176 S990 255, 1080 192 S1260 118, 1350 176 S1490 236, 1580 168"
+            />
+          </svg>
+          <div class="story-gallery-track" id="story-gallery-track">
+            <article class="story-card story-card-feature story-card-caption-top">
+              <span class="story-card-index">01</span>
+              <p class="story-card-caption">The beginning of something unforgettable</p>
+              <div class="story-card-image"><span>Add Photo</span></div>
+            </article>
+            <article class="story-card story-card-caption-bottom">
+              <span class="story-card-index">02</span>
+              <div class="story-card-image"><span>Add Photo</span></div>
+              <p class="story-card-caption">A small moment, held like a keepsake</p>
+            </article>
+            <article class="story-card story-card-caption-top">
+              <span class="story-card-index">03</span>
+              <p class="story-card-caption">Soft laughter and stolen glances</p>
+              <div class="story-card-image"><span>Add Photo</span></div>
+            </article>
+            <article class="story-card story-card-caption-bottom">
+              <span class="story-card-index">04</span>
+              <div class="story-card-image"><span>Add Photo</span></div>
+              <p class="story-card-caption">The kind of memory that lingers</p>
+            </article>
+            <article class="story-card story-card-caption-top">
+              <span class="story-card-index">05</span>
+              <p class="story-card-caption">Golden light and familiar joy</p>
+              <div class="story-card-image"><span>Add Photo</span></div>
+            </article>
+            <article class="story-card story-card-tall story-card-caption-bottom">
+              <span class="story-card-index">06</span>
+              <div class="story-card-image"><span>Add Photo</span></div>
+              <p class="story-card-caption">A chapter that kept unfolding beautifully</p>
+            </article>
+            <article class="story-card story-card-caption-top">
+              <span class="story-card-index">07</span>
+              <p class="story-card-caption">The in-between moments matter too</p>
+              <div class="story-card-image"><span>Add Photo</span></div>
+            </article>
+            <article class="story-card story-card-caption-bottom">
+              <span class="story-card-index">08</span>
+              <div class="story-card-image"><span>Add Photo</span></div>
+              <p class="story-card-caption">Every frame carrying its own warmth</p>
+            </article>
+            <article class="story-card story-card-caption-top">
+              <span class="story-card-index">09</span>
+              <p class="story-card-caption">A story made of gentleness and time</p>
+              <div class="story-card-image"><span>Add Photo</span></div>
+            </article>
+            <article class="story-card story-card-feature story-card-caption-bottom">
+              <span class="story-card-index">10</span>
+              <div class="story-card-image"><span>Add Photo</span></div>
+              <p class="story-card-caption">And now, a wedding weekend begins</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="moonlight-section" id="dates">
+      <div class="moonlight-copy reveal">
+        <p class="eyebrow">Save The Weekend</p>
+        <h2 id="dates-headline">May 6 to May 8</h2>
+        <p class="moonlight-text">
+          Three days of celebration, ceremony, music, and memories with the
+          people we love most.
+        </p>
+        <div class="countdown reveal delay-1" id="countdown">
+          <div class="countdown-item">
+            <strong id="countdown-days">00</strong>
+            <span>Days</span>
+          </div>
+          <div class="countdown-item">
+            <strong id="countdown-hours">00</strong>
+            <span>Hours</span>
+          </div>
+          <div class="countdown-item">
+            <strong id="countdown-minutes">00</strong>
+            <span>Minutes</span>
+          </div>
+        </div>
+      </div>
+      <div class="moonlight-media">
+        <video
+          class="moonlight-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+          loop
+        >
+          <source src="./assets/horses.mp4?v=20260316-5" type="video/mp4" />
+        </video>
+        <div class="moonlight-overlay"></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="section schedule" id="schedule">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Event Schedule</p>
+          <h2>Celebrate with us across four moments.</h2>
+        </div>
+        <div class="schedule-layout">
+          <div class="timeline" id="timeline"></div>
+          <aside class="schedule-media reveal delay-1" id="event-spotlight">
+            <video class="schedule-media-video" autoplay muted playsinline preload="auto" loop>
+              <source src="./assets/roses-1.MOV?v=20260316-7" />
+            </video>
+            <div class="schedule-media-overlay"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section team-section" id="teams">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Pick A Side</p>
+          <h2>Team bride or team groom?</h2>
+          <p class="team-section-copy">
+            Tap a side and watch the moment take over the screen for a few seconds.
+          </p>
+        </div>
+        <div class="team-grid">
+          <button class="team-choice reveal" type="button" data-team="bride">
+            <span class="team-choice-label">Team Bride</span>
+            <span class="team-choice-name">Kushalaa</span>
+          </button>
+          <button class="team-choice reveal delay-1" type="button" data-team="groom">
+            <span class="team-choice-label">Team Groom</span>
+            <span class="team-choice-name">Sharath</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section location" id="location">
+        <div class="location-copy reveal">
+          <p class="eyebrow">Venue & Directions</p>
+          <p id="location-summary">
+            Final venue details can be updated here once confirmed.
+          </p>
+          <div class="location-actions">
+            <a
+              class="button button-primary"
+              id="map-directions-link"
+              href="#"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open Directions
+            </a>
+            <a
+              class="button button-secondary"
+              id="calendar-download-link"
+              href="#schedule"
+            >
+              Save the Dates
+            </a>
+          </div>
+          <div class="travel-note">
+            <span class="travel-pulse"></span>
+            Tap directions to open the venue instantly in Google Maps.
+          </div>
+        </div>
+        <div class="map-shell reveal delay-1">
+          <iframe
+            id="map-embed"
+            title="Wedding venue map"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="section split-banner" id="events-banner" aria-label="Events to follow">
+        <div class="split-banner-media">
+          <video
+            class="split-banner-video"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+            loop
+          >
+            <source src="./assets/dinner-table.mp4?v=20260316-6" type="video/mp4" />
+          </video>
+          <div class="split-banner-media-overlay"></div>
+        </div>
+        <div class="split-banner-row">
+          <div class="split-banner-panel split-banner-left">
+            <span class="split-banner-text">Events</span>
+          </div>
+          <div class="split-banner-panel split-banner-right">
+            <span class="split-banner-text">to follow</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer reveal">
+      <p id="footer-line">We can’t wait to celebrate with you.</p>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <div class="team-flash" id="team-flash" aria-hidden="true">
+      <div class="team-flash-backdrop"></div>
+      <div class="team-fireworks" id="team-fireworks" aria-hidden="true"></div>
+      <div class="team-flash-card">
+        <img class="team-flash-image" id="team-flash-image" alt="" hidden />
+        <div class="team-flash-fallback" id="team-flash-fallback">
+          <span class="team-flash-initials" id="team-flash-initials">K</span>
+        </div>
+        <div class="team-flash-copy">
+          <p class="team-flash-label" id="team-flash-label">Team Bride</p>
+          <h3 class="team-flash-name" id="team-flash-name">Kushalaa</h3>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js?v=20260316-7"></script>
+  </body>
+</html>
