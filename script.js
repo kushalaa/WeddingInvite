@@ -7,6 +7,7 @@ const weddingConfig = {
       label: "Team Bride",
       name: "Kushalaa",
       initials: "K",
+      videoCandidates: ["./assets/team-bride.mov", "./assets/team-bride.mp4"],
       imageCandidates: [
         "./assets/team-bride.jpg",
         "./assets/team-bride.jpeg",
@@ -18,6 +19,7 @@ const weddingConfig = {
       label: "Team Groom",
       name: "Sharath",
       initials: "S",
+      videoCandidates: ["./assets/team-groom.mov", "./assets/team-groom.mp4"],
       imageCandidates: [
         "./assets/team-groom.jpg",
         "./assets/team-groom.jpeg",
@@ -33,7 +35,7 @@ const weddingConfig = {
     embedUrl:
       "https://www.google.com/maps?q=Samavana%2C%20Sy.%20no%2074%2C%2010%2C%20opposite%20JB%20Kaval%20Tree%20Park%2C%20Jarakabande%20Kaval%2C%20Yelahanka%2C%20Bengaluru%2C%20Ramagondanahalli%2C%20Karnataka%20560119%2C%20India&z=16&output=embed"
   },
-  calendarFileName: "wedding-weekend.ics",
+  calendarFileName: "Kushalaa-Sharath-wedding-dates.ics",
   events: [
     {
       id: "sangeet",
@@ -62,11 +64,11 @@ const weddingConfig = {
       id: "reception",
       dateLabel: "May 7",
       title: "Reception",
-      time: "6:30 PM onwards",
+      time: "6:30 PM",
       description:
         "An elegant reception with dinner, speeches, and a luminous evening atmosphere.",
       hoverCopy:
-        "When the formalities fade and the celebration begins, 6:30 PM onwards.",
+        "When the formalities fade and the celebration begins, 6:30 PM.",
       calendarStart: "20260507T183000",
       calendarEnd: "20260507T213000"
     },
@@ -101,6 +103,7 @@ const pointerTargets = document.querySelectorAll(".location-copy, .map-shell");
 const chapterLinks = document.querySelectorAll(".chapter-link");
 const teamChoices = document.querySelectorAll(".team-choice");
 const teamFlash = document.querySelector("#team-flash");
+const teamFlashVideo = document.querySelector("#team-flash-video");
 const teamFlashImage = document.querySelector("#team-flash-image");
 const teamFlashFallback = document.querySelector("#team-flash-fallback");
 const teamFlashInitials = document.querySelector("#team-flash-initials");
@@ -482,6 +485,26 @@ function loadImageCandidate(imageCandidates) {
   });
 }
 
+function loadVideoCandidate(videoCandidates) {
+  const [currentCandidate, ...remainingCandidates] = videoCandidates;
+
+  if (!currentCandidate) {
+    return Promise.resolve("");
+  }
+
+  return new Promise((resolve) => {
+    const candidateVideo = document.createElement("video");
+    candidateVideo.muted = true;
+    candidateVideo.playsInline = true;
+    candidateVideo.preload = "metadata";
+    candidateVideo.onloadeddata = () => resolve(currentCandidate);
+    candidateVideo.onerror = () => {
+      loadVideoCandidate(remainingCandidates).then(resolve);
+    };
+    candidateVideo.src = `${currentCandidate}?v=20260317-6`;
+  });
+}
+
 async function showTeamFlash(teamKey) {
   const team = weddingConfig.teams[teamKey];
 
@@ -497,28 +520,35 @@ async function showTeamFlash(teamKey) {
   teamFlashLabel.textContent = team.label;
   teamFlashName.textContent = team.name;
   teamFlashInitials.textContent = team.initials;
+  teamFlashVideo.pause();
+  teamFlashVideo.removeAttribute("src");
+  teamFlashVideo.load();
+  teamFlashVideo.hidden = false;
   teamFlashImage.hidden = true;
-  teamFlashFallback.hidden = false;
+  teamFlashFallback.hidden = true;
+  teamFlash.classList.add("has-video");
   teamFlash.classList.add("is-visible");
   teamFlash.setAttribute("aria-hidden", "false");
   document.body.classList.add("has-team-flash");
   createTeamFireworks();
 
-  const resolvedImage = await loadImageCandidate(team.imageCandidates);
+  const resolvedVideo = await loadVideoCandidate(team.videoCandidates || []);
   if (requestId !== teamFlashRequestId) {
     return;
   }
 
-  if (resolvedImage) {
-    teamFlashImage.src = `${resolvedImage}?v=20260316-7`;
-    teamFlashImage.alt = team.name;
-    teamFlashImage.hidden = false;
-    teamFlashFallback.hidden = true;
+  if (resolvedVideo) {
+    teamFlashVideo.src = `${resolvedVideo}?v=20260317-6`;
+    teamFlashVideo.play().catch(() => {});
   }
 
   teamFlashTimeoutId = window.setTimeout(() => {
     teamFlash.classList.remove("is-visible");
+    teamFlash.classList.remove("has-video");
     teamFlash.setAttribute("aria-hidden", "true");
+    teamFlashVideo.pause();
+    teamFlashVideo.removeAttribute("src");
+    teamFlashVideo.load();
     teamFlashImage.removeAttribute("src");
     teamFireworks.classList.remove("is-active");
     teamFireworks.replaceChildren();
