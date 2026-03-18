@@ -507,6 +507,20 @@ function loadVideoCandidate(videoCandidates) {
   });
 }
 
+function hideTeamFlash() {
+  teamFlash.classList.remove("is-visible");
+  teamFlash.classList.remove("has-video");
+  teamFlash.setAttribute("aria-hidden", "true");
+  teamFlashVideo.pause();
+  teamFlashVideo.onended = null;
+  teamFlashVideo.removeAttribute("src");
+  teamFlashVideo.load();
+  teamFlashImage.removeAttribute("src");
+  teamFireworks.classList.remove("is-active");
+  teamFireworks.replaceChildren();
+  document.body.classList.remove("has-team-flash");
+}
+
 async function showTeamFlash(teamKey) {
   const team = weddingConfig.teams[teamKey];
 
@@ -517,6 +531,7 @@ async function showTeamFlash(teamKey) {
   const requestId = teamFlashRequestId + 1;
   teamFlashRequestId = requestId;
   window.clearTimeout(teamFlashTimeoutId);
+  teamFlashVideo.onended = null;
 
   teamFlash.dataset.team = teamKey;
   teamFlashLabel.textContent = team.label;
@@ -541,20 +556,19 @@ async function showTeamFlash(teamKey) {
 
   if (resolvedVideo) {
     teamFlashVideo.src = `${resolvedVideo}?v=${TEAM_MEDIA_VERSION}`;
+    teamFlashVideo.onended = () => {
+      if (requestId !== teamFlashRequestId) {
+        return;
+      }
+
+      hideTeamFlash();
+    };
     teamFlashVideo.play().catch(() => {});
+    return;
   }
 
   teamFlashTimeoutId = window.setTimeout(() => {
-    teamFlash.classList.remove("is-visible");
-    teamFlash.classList.remove("has-video");
-    teamFlash.setAttribute("aria-hidden", "true");
-    teamFlashVideo.pause();
-    teamFlashVideo.removeAttribute("src");
-    teamFlashVideo.load();
-    teamFlashImage.removeAttribute("src");
-    teamFireworks.classList.remove("is-active");
-    teamFireworks.replaceChildren();
-    document.body.classList.remove("has-team-flash");
+    hideTeamFlash();
   }, 3000);
 }
 

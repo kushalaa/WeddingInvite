@@ -1573,7 +1573,7 @@ h2 {
 }
 
 .team-fireworks.is-active .team-firework-spark {
-  animation: teamFireworkBurst 1.15s ease-out forwards;
+  animation: teamFireworkBurst 1.35s ease-out infinite;
   animation-delay: var(--spark-delay, 0s);
 }
 
