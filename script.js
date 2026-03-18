@@ -7,7 +7,7 @@ const weddingConfig = {
       label: "Team Bride",
       name: "Kushalaa",
       initials: "K",
-      videoCandidates: ["./assets/team-bride.mov?v=20260318-100100", "./assets/team-bride.mp4?v=20260318-100100"],
+      videoCandidates: ["./assets/team-bride.mov?v=20260318-100250", "./assets/team-bride.mp4?v=20260318-100250"],
       imageCandidates: [
         "./assets/team-bride.jpg",
         "./assets/team-bride.jpeg",
@@ -19,7 +19,7 @@ const weddingConfig = {
       label: "Team Groom",
       name: "Sharath",
       initials: "S",
-      videoCandidates: ["./assets/team-groom.mov?v=20260318-100100", "./assets/team-groom.mp4?v=20260318-100100"],
+      videoCandidates: ["./assets/team-groom.mov?v=20260318-100250", "./assets/team-groom.mp4?v=20260318-100250"],
       imageCandidates: [
         "./assets/team-groom.jpg",
         "./assets/team-groom.jpeg",
