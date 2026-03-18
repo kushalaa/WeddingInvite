@@ -1,7 +1,7 @@
 const weddingConfig = {
   coupleNames: "Sharath & Kushalaa",
   heroLocation: "Samavana, Bengaluru",
-  footerLine: "We can't wait to celebrate with you.",
+  footerLine: "Both teams are excited to see you there!",
   teams: {
     bride: {
       label: "Team Bride",
@@ -107,6 +107,7 @@ const teamFlashInitials = document.querySelector("#team-flash-initials");
 const teamFlashLabel = document.querySelector("#team-flash-label");
 const teamFlashName = document.querySelector("#team-flash-name");
 const teamFireworks = document.querySelector("#team-fireworks");
+const datesHeadline = document.querySelector("#dates-headline");
 const countdownIds = {
   days: document.querySelector("#countdown-days"),
   hours: document.querySelector("#countdown-hours"),
@@ -158,8 +159,11 @@ function createTeamFireworks() {
 function applyConfig() {
   document.querySelector("#location-summary").textContent = weddingConfig.map.label;
   document.querySelector("#footer-line").textContent = weddingConfig.footerLine;
-  document.querySelector("#dates-headline").textContent =
-    weddingConfig.events.map((event) => event.dateLabel).filter(uniqueOnly).join(" • ");
+  document.querySelector("#dates-headline").innerHTML = weddingConfig.events
+    .map((event) => event.dateLabel)
+    .filter(uniqueOnly)
+    .map((dateLabel) => `<span class="dates-roll-item">${dateLabel}</span>`)
+    .join('<span class="dates-roll-separator">•</span>');
   directionsLink.href = weddingConfig.map.directionsUrl;
   mapEmbed.src = weddingConfig.map.embedUrl;
   calendarUrl = createCalendarFile();
@@ -227,6 +231,36 @@ function setupReveals() {
   document.querySelectorAll(".reveal").forEach((element) => {
     observer.observe(element);
   });
+}
+
+function setupDatesRollout() {
+  if (!datesHeadline) {
+    return;
+  }
+
+  const dateParts = [...datesHeadline.querySelectorAll(".dates-roll-item, .dates-roll-separator")];
+  let hasRolled = false;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || hasRolled) {
+          return;
+        }
+
+        hasRolled = true;
+        dateParts.forEach((part, index) => {
+          window.setTimeout(() => {
+            part.classList.add("is-visible");
+          }, 180 + index * 220);
+        });
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  observer.observe(datesHeadline);
 }
 
 function setupPointerGlow() {
@@ -555,6 +589,7 @@ function createCalendarEvent(start, end, summary, description) {
 applyConfig();
 setupOpeningSequence();
 setupReveals();
+setupDatesRollout();
 setupPointerGlow();
 setupParallaxCards();
 setupScrollProgress();

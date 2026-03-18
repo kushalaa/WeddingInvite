@@ -1,15 +1,15 @@
 :root {
-  --bg: #2d0b10;
-  --bg-strong: #381015;
-  --panel: rgba(64, 17, 22, 0.58);
-  --panel-strong: rgba(76, 21, 28, 0.78);
+  --bg: #1d0205;
+  --bg-strong: #280408;
+  --panel: rgba(36, 8, 12, 0.62);
+  --panel-strong: rgba(47, 12, 17, 0.82);
   --text: #f5e9dd;
   --muted: #d7bfb1;
   --gold: #b48a4f;
   --gold-soft: #e4c898;
   --rose: #a64654;
-  --burgundy: #481116;
-  --burgundy-deep: #2f0b0f;
+  --burgundy: #2b0307;
+  --burgundy-deep: #170103;
   --shadow: 0 26px 90px rgba(69, 16, 28, 0.18);
   --border: rgba(228, 200, 152, 0.16);
 }
@@ -29,10 +29,10 @@ body {
   font-weight: 500;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(180, 138, 79, 0.03), transparent 18%),
-    radial-gradient(circle at right 14%, rgba(88, 22, 28, 0.1), transparent 22%),
-    radial-gradient(circle at 50% 120%, rgba(180, 138, 79, 0.05), transparent 30%),
-    linear-gradient(180deg, #2d0b10 0%, #3a0f14 42%, #321015 100%);
+    radial-gradient(circle at top left, rgba(180, 138, 79, 0.015), transparent 16%),
+    radial-gradient(circle at right 14%, rgba(88, 22, 28, 0.06), transparent 20%),
+    radial-gradient(circle at 50% 120%, rgba(180, 138, 79, 0.03), transparent 28%),
+    linear-gradient(180deg, #1d0205 0%, #240307 42%, #170103 100%);
   position: relative;
   overflow-x: hidden;
 }
@@ -355,7 +355,7 @@ textarea {
   flex-direction: column;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem);
-  background: linear-gradient(180deg, rgba(63, 18, 24, 0.97), rgba(51, 14, 19, 0.98));
+  background: linear-gradient(180deg, rgba(36, 8, 12, 0.97), rgba(25, 5, 8, 0.98));
   color: #fff7f2;
   border-right: 1px solid rgba(228, 200, 152, 0.12);
 }
@@ -404,7 +404,7 @@ textarea {
 .moonlight-video {
   object-fit: cover;
   object-position: center center;
-  background: #321015;
+  background: #170103;
 }
 
 .moonlight-overlay {
@@ -422,15 +422,42 @@ textarea {
   justify-content: center;
   text-align: left;
   padding: clamp(2rem, 4vw, 4rem);
-  background: linear-gradient(180deg, rgba(63, 18, 24, 0.97), rgba(51, 14, 19, 0.98));
+  background: linear-gradient(180deg, rgba(36, 8, 12, 0.97), rgba(25, 5, 8, 0.98));
   border-left: 1px solid rgba(228, 200, 152, 0.12);
 }
 
 .moonlight-copy h2 {
-  font-size: clamp(2.8rem, 7vw, 5.2rem);
+  font-size: clamp(2.3rem, 5.8vw, 4.2rem);
   margin-bottom: 1rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+}
+
+#dates-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.dates-roll-item,
+.dates-roll-separator {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dates-roll-item.is-visible,
+.dates-roll-separator.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dates-roll-separator {
+  color: rgba(228, 200, 152, 0.8);
 }
 
 .moonlight-text {
@@ -447,8 +474,8 @@ textarea {
   min-height: 390vh;
   padding: 0;
   background:
-    radial-gradient(circle at 20% 18%, rgba(180, 138, 79, 0.05), transparent 22%),
-    linear-gradient(180deg, rgba(62, 17, 22, 0.98), rgba(47, 13, 18, 0.98));
+    radial-gradient(circle at 20% 18%, rgba(180, 138, 79, 0.025), transparent 20%),
+    linear-gradient(180deg, rgba(34, 7, 11, 0.98), rgba(23, 4, 7, 0.98));
 }
 
 .our-story-sticky {
@@ -510,41 +537,6 @@ textarea {
   opacity: var(--story-gallery-opacity, 0);
   transform: translateY(var(--story-gallery-shift, 28px));
   transition: opacity 120ms linear, transform 120ms linear;
-}
-
-.story-thread {
-  position: absolute;
-  inset: 8% -6% 10% -4%;
-  width: 112%;
-  height: 82%;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.story-thread-path {
-  fill: none;
-  stroke: rgba(214, 184, 129, 0.78);
-  stroke-width: 1.55;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 2200;
-  stroke-dashoffset: calc(2200 - (2200 * var(--story-thread-progress, 0)));
-  opacity: calc(0.24 + var(--story-thread-progress, 0) * 0.72);
-  filter: drop-shadow(0 0 5px rgba(228, 200, 152, 0.14));
-}
-
-.story-thread-path-shadow {
-  stroke: rgba(82, 55, 25, 0.44);
-  stroke-width: 3.2;
-  opacity: calc(0.12 + var(--story-thread-progress, 0) * 0.26);
-  transform: translateY(1.5px);
-}
-
-.story-thread-path-highlight {
-  stroke: rgba(255, 241, 212, 0.68);
-  stroke-width: 0.85;
-  opacity: calc(0.18 + var(--story-thread-progress, 0) * 0.66);
-  filter: drop-shadow(0 0 7px rgba(228, 200, 152, 0.18));
 }
 
 .story-gallery-track {
@@ -633,16 +625,6 @@ textarea {
 
 .story-card:nth-child(10) {
   margin-top: 4.4rem;
-}
-
-.story-card-index {
-  display: inline-block;
-  justify-self: start;
-  margin-left: 0.25rem;
-  color: var(--gold);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
 }
 
 .story-card-caption {
@@ -1045,8 +1027,8 @@ h2 {
   padding: 1.15rem;
   border-radius: 1.8rem 0.85rem 1.6rem 1rem;
   background:
-    linear-gradient(180deg, rgba(59, 16, 21, 0.86), rgba(46, 13, 18, 0.92)),
-    radial-gradient(circle at top left, rgba(228, 200, 152, 0.05), transparent 28%);
+    linear-gradient(180deg, rgba(33, 7, 11, 0.9), rgba(24, 5, 8, 0.94)),
+    radial-gradient(circle at top left, rgba(228, 200, 152, 0.03), transparent 24%);
   overflow: hidden;
   cursor: pointer;
   border: 1px solid rgba(228, 200, 152, 0.12);
@@ -1257,7 +1239,7 @@ h2 {
 .schedule-media-video {
   object-fit: cover;
   object-position: center center;
-  background: #321015;
+  background: #170103;
 }
 
 .schedule-media-overlay {
@@ -1268,27 +1250,60 @@ h2 {
 
 .location {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 1.5rem;
-  align-items: start;
+  align-items: stretch;
   padding-top: 2rem;
   border-top: 1px solid rgba(228, 200, 152, 0.12);
 }
 
 .location-copy {
-  padding-right: 0;
+  position: relative;
+  min-height: 460px;
+  overflow: hidden;
+}
+
+.location-copy-media,
+.location-copy-video,
+.location-copy-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.location-copy-video {
+  object-fit: cover;
+  object-position: center center;
+  background: #170103;
+}
+
+.location-copy-overlay {
+  background:
+    linear-gradient(180deg, rgba(18, 4, 10, 0.36), rgba(18, 4, 10, 0.62)),
+    radial-gradient(circle at center, rgba(228, 200, 152, 0.05), transparent 46%);
+}
+
+.location-copy-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: clamp(2rem, 4vw, 3rem);
 }
 
 .map-shell {
   position: relative;
-  padding-left: 0;
-  padding-top: 1.5rem;
-  border-left: 0;
-  border-top: 1px solid rgba(228, 200, 152, 0.12);
+  min-height: 460px;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(228, 200, 152, 0.12);
 }
 
 .map-shell iframe {
   width: 100%;
+  height: 100%;
   min-height: 460px;
   border: 0;
   border-radius: 0;
@@ -1316,7 +1331,12 @@ h2 {
 
 .team-section {
   position: relative;
-  padding-top: 5rem;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 100vh;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
   border-top: 1px solid rgba(228, 200, 152, 0.12);
   overflow: hidden;
   width: 100vw;
@@ -1349,7 +1369,7 @@ h2 {
 
 .team-section-image {
   background:
-    url("./assets/chandelier.JPG?v=20260317-1") center center / cover no-repeat,
+    url("./assets/chandelier.JPG?v=20260317-1") center 24% / cover no-repeat,
     #321015;
 }
 
@@ -1365,10 +1385,31 @@ h2 {
   z-index: 1;
 }
 
+.team-section .section-heading {
+  width: min(1120px, calc(100% - 2rem));
+  margin-bottom: 2.2rem;
+  text-align: center;
+}
+
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
+  width: min(920px, calc(100% - 2rem));
+}
+
+.team-section-footer {
+  position: relative;
+  z-index: 1;
+  width: min(920px, calc(100% - 2rem));
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(228, 200, 152, 0.12);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: var(--gold-soft);
 }
 
 .team-choice {
@@ -1380,8 +1421,8 @@ h2 {
   padding: clamp(1.5rem, 3vw, 2.4rem);
   border: 1px solid rgba(228, 200, 152, 0.14);
   background:
-    radial-gradient(circle at top left, rgba(184, 139, 82, 0.16), transparent 28%),
-    linear-gradient(180deg, rgba(56, 9, 20, 0.44), rgba(28, 6, 12, 0.18));
+    radial-gradient(circle at top left, rgba(184, 139, 82, 0.1), transparent 24%),
+    linear-gradient(180deg, rgba(35, 7, 11, 0.48), rgba(18, 4, 7, 0.24));
   color: var(--text);
   text-align: left;
   overflow: hidden;
@@ -1408,8 +1449,8 @@ h2 {
   transform: translateY(-6px);
   border-color: rgba(228, 200, 152, 0.28);
   background:
-    radial-gradient(circle at top left, rgba(184, 139, 82, 0.22), transparent 30%),
-    linear-gradient(180deg, rgba(78, 14, 30, 0.58), rgba(33, 7, 14, 0.22));
+    radial-gradient(circle at top left, rgba(184, 139, 82, 0.14), transparent 28%),
+    linear-gradient(180deg, rgba(47, 10, 16, 0.62), rgba(22, 5, 9, 0.26));
 }
 
 .team-choice:focus-visible {
@@ -1503,7 +1544,7 @@ h2 {
   width: min(28rem, calc(100vw - 3rem));
   aspect-ratio: 0.78;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(70, 19, 24, 0.88), rgba(47, 13, 18, 0.96));
+  background: linear-gradient(180deg, rgba(40, 8, 12, 0.9), rgba(23, 4, 7, 0.96));
   box-shadow: 0 34px 100px rgba(5, 1, 3, 0.48);
   transform: translateY(18px) scale(0.96);
   transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -1712,7 +1753,6 @@ h2 {
   .intro-stage,
   .hero,
   .film-section,
-  .location,
   .timeline,
   .schedule-layout {
     grid-template-columns: 1fr;
@@ -1744,6 +1784,20 @@ h2 {
 
   .team-grid {
     grid-template-columns: 1fr;
+  }
+
+  .team-section-footer {
+    flex-direction: column;
+  }
+
+  .team-section {
+    min-height: 84vh;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .team-section-image {
+    background-position: center 18%;
   }
 
   .our-story-sticky {
@@ -1778,6 +1832,22 @@ h2 {
   .schedule-media {
     position: relative;
     top: 0;
+  }
+
+  .location {
+    grid-template-columns: 1fr;
+  }
+
+  .location-copy {
+    min-height: 62vh;
+  }
+
+  .map-shell {
+    min-height: 62vh;
+    padding-left: 0;
+    padding-top: 1.5rem;
+    border-left: 0;
+    border-top: 1px solid rgba(228, 200, 152, 0.12);
   }
 
   .chapter-rail {
