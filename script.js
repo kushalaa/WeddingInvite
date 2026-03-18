@@ -7,7 +7,7 @@ const weddingConfig = {
       label: "Team Bride",
       name: "Kushalaa",
       initials: "K",
-      videoCandidates: ["./assets/team-bride.mov?v=20260318-100634", "./assets/team-bride.mp4?v=20260318-100634"],
+      videoCandidates: ["./assets/team-bride.mov", "./assets/team-bride.mp4"],
       imageCandidates: [
         "./assets/team-bride.jpg",
         "./assets/team-bride.jpeg",
@@ -19,7 +19,7 @@ const weddingConfig = {
       label: "Team Groom",
       name: "Sharath",
       initials: "S",
-      videoCandidates: ["./assets/team-groom.mov?v=20260318-100634", "./assets/team-groom.mp4?v=20260318-100634"],
+      videoCandidates: ["./assets/team-groom.mov", "./assets/team-groom.mp4"],
       imageCandidates: [
         "./assets/team-groom.jpg",
         "./assets/team-groom.jpeg",
@@ -85,6 +85,8 @@ const weddingConfig = {
     }
   ]
 };
+
+const TEAM_MEDIA_VERSION = "20260318-100900";
 
 const timeline = document.querySelector("#timeline");
 const mapEmbed = document.querySelector("#map-embed");
@@ -501,7 +503,7 @@ function loadVideoCandidate(videoCandidates) {
     candidateVideo.onerror = () => {
       loadVideoCandidate(remainingCandidates).then(resolve);
     };
-    candidateVideo.src = `${currentCandidate}?v=20260317-6`;
+    candidateVideo.src = `${currentCandidate}?v=${TEAM_MEDIA_VERSION}`;
   });
 }
 
@@ -538,7 +540,7 @@ async function showTeamFlash(teamKey) {
   }
 
   if (resolvedVideo) {
-    teamFlashVideo.src = `${resolvedVideo}?v=20260317-6`;
+    teamFlashVideo.src = `${resolvedVideo}?v=${TEAM_MEDIA_VERSION}`;
     teamFlashVideo.play().catch(() => {});
   }
 
