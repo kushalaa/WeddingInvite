@@ -473,8 +473,6 @@ function setupAudioToggle() {
       return;
     }
 
-    hasPrimedAutoPlay = true;
-
     try {
       await backgroundAudio.play();
       isPlaying = true;
