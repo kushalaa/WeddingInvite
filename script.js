@@ -399,7 +399,7 @@ function setupOurStoryScroll() {
     const galleryShift = prefersReducedMotion ? 0 : (1 - galleryProgress) * 28;
     const startOffset = Math.min(window.innerWidth * 0.18, 180);
     const travelDistance = Math.max(storyGalleryTrack.scrollWidth - window.innerWidth + startOffset, 0);
-    const trackOffset = prefersReducedMotion ? 0 : startOffset - galleryProgress * travelDistance;
+    const trackOffset = prefersReducedMotion ? 0 : startOffset - galleryProgress * (travelDistance * 0.82);
     const cardLift = prefersReducedMotion ? 0 : galleryProgress * 26;
 
     ourStorySection.style.setProperty("--story-title-shift", `${titleShift}px`);
