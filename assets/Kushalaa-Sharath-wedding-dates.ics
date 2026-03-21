@@ -1,0 +1,40 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wedding Invite//EN
+BEGIN:VEVENT
+UID:sangeet@weddinginvite.local
+DTSTAMP:20260321T200000Z
+DTSTART:20260506T183000
+DTEND:20260506T213000
+SUMMARY:Sangeet
+DESCRIPTION:We're dancing like nobody's watching... but you definitely should be. Join us at 6:30 PM
+LOCATION:Samavana, Bengaluru
+END:VEVENT
+BEGIN:VEVENT
+UID:engagement@weddinginvite.local
+DTSTAMP:20260321T200000Z
+DTSTART:20260507T110000
+DTEND:20260507T133000
+SUMMARY:Engagement
+DESCRIPTION:We are making it official, witness it at 11:00 AM
+LOCATION:Samavana, Bengaluru
+END:VEVENT
+BEGIN:VEVENT
+UID:reception@weddinginvite.local
+DTSTAMP:20260321T200000Z
+DTSTART:20260507T183000
+DTEND:20260507T213000
+SUMMARY:Reception
+DESCRIPTION:When the formalities fade and the celebration begins, 6:30 PM.
+LOCATION:Samavana, Bengaluru
+END:VEVENT
+BEGIN:VEVENT
+UID:wedding@weddinginvite.local
+DTSTAMP:20260321T200000Z
+DTSTART:20260508T101100
+DTEND:20260508T131100
+SUMMARY:Wedding
+DESCRIPTION:A sacred hour, quietly ours-10:11AM
+LOCATION:Samavana, Bengaluru
+END:VEVENT
+END:VCALENDAR

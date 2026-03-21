@@ -91,7 +91,6 @@ const TEAM_MEDIA_VERSION = "20260321-123500";
 const timeline = document.querySelector("#timeline");
 const mapEmbed = document.querySelector("#map-embed");
 const directionsLink = document.querySelector("#map-directions-link");
-const calendarDownloadLink = document.querySelector("#calendar-download-link");
 const backgroundAudio = document.querySelector("#background-audio");
 const musicToggle = document.querySelector("#music-toggle");
 const openingSpotlight = document.querySelector("#top");
@@ -118,7 +117,6 @@ const countdownIds = {
   hours: document.querySelector("#countdown-hours"),
   minutes: document.querySelector("#countdown-minutes")
 };
-let calendarUrl = "";
 let spotlightIntervalId = 0;
 let teamFlashTimeoutId = 0;
 let teamFlashRequestId = 0;
@@ -171,9 +169,6 @@ function applyConfig() {
     .join('<span class="dates-roll-separator">•</span>');
   directionsLink.href = weddingConfig.map.directionsUrl;
   mapEmbed.src = weddingConfig.map.embedUrl;
-  calendarUrl = createCalendarFile();
-  calendarDownloadLink.href = calendarUrl;
-  calendarDownloadLink.download = weddingConfig.calendarFileName;
   weddingConfig.events.forEach((event, index) => {
     const item = document.createElement("article");
     item.className = `timeline-item timeline-item--${event.id} reveal`;
@@ -617,39 +612,6 @@ function createPetals() {
     petal.style.transform = `scale(${0.7 + Math.random() * 0.8})`;
     field.appendChild(petal);
   }
-}
-
-function createCalendarFile() {
-  const events = weddingConfig.events
-    .map((event) =>
-      createCalendarEvent(event.calendarStart, event.calendarEnd, event.title, event.hoverCopy)
-    )
-    .join("\n");
-
-  const calendar = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Wedding Invite//EN",
-    events,
-    "END:VCALENDAR"
-  ].join("\n");
-
-  const blob = new Blob([calendar], { type: "text/calendar;charset=utf-8" });
-  return URL.createObjectURL(blob);
-}
-
-function createCalendarEvent(start, end, summary, description) {
-  return [
-    "BEGIN:VEVENT",
-    `UID:${summary.toLowerCase()}@weddinginvite.local`,
-    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `SUMMARY:${summary}`,
-    `DESCRIPTION:${description}`,
-    `LOCATION:${weddingConfig.heroLocation}`,
-    "END:VEVENT"
-  ].join("\n");
 }
 
 applyConfig();
