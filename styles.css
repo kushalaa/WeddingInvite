@@ -2004,6 +2004,7 @@ h2 {
   }
 
   .story-gallery-shell {
+    overflow-x: hidden;
     overflow-x: clip;
   }
 
