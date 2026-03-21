@@ -594,6 +594,22 @@ textarea {
   width: clamp(18rem, 24vw, 22rem);
 }
 
+.story-card-spacer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.story-card-spacer .story-card-image {
+  min-height: clamp(18rem, 32vw, 25rem);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.story-card-spacer .story-card-image::after {
+  display: none;
+}
+
 .story-card:nth-child(1) {
   margin-top: -1rem;
 }

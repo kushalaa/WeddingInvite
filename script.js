@@ -442,6 +442,7 @@ function setupCountdown() {
 
 function setupAudioToggle() {
   let isPlaying = false;
+  let hasPrimedAutoPlay = false;
 
   async function toggleAudio() {
     if (!backgroundAudio) {
@@ -467,7 +468,29 @@ function setupAudioToggle() {
     }
   }
 
+  async function autoStartAudio() {
+    if (!backgroundAudio || hasPrimedAutoPlay || isPlaying) {
+      return;
+    }
+
+    hasPrimedAutoPlay = true;
+
+    try {
+      await backgroundAudio.play();
+      isPlaying = true;
+      musicToggle.textContent = "Sound On";
+      musicToggle.setAttribute("aria-pressed", "true");
+    } catch {
+      musicToggle.textContent = "Tap for Sound";
+      musicToggle.setAttribute("aria-pressed", "false");
+    }
+  }
+
   musicToggle.addEventListener("click", toggleAudio);
+  window.addEventListener("pointerdown", autoStartAudio, { once: true, passive: true });
+  window.addEventListener("touchstart", autoStartAudio, { once: true, passive: true });
+  window.addEventListener("scroll", autoStartAudio, { once: true, passive: true });
+  window.addEventListener("keydown", autoStartAudio, { once: true });
 }
 
 function loadImageCandidate(imageCandidates) {
