@@ -487,26 +487,6 @@ function loadImageCandidate(imageCandidates) {
   });
 }
 
-function loadVideoCandidate(videoCandidates) {
-  const [currentCandidate, ...remainingCandidates] = videoCandidates;
-
-  if (!currentCandidate) {
-    return Promise.resolve("");
-  }
-
-  return new Promise((resolve) => {
-    const candidateVideo = document.createElement("video");
-    candidateVideo.muted = true;
-    candidateVideo.playsInline = true;
-    candidateVideo.preload = "metadata";
-    candidateVideo.onloadeddata = () => resolve(currentCandidate);
-    candidateVideo.onerror = () => {
-      loadVideoCandidate(remainingCandidates).then(resolve);
-    };
-    candidateVideo.src = `${currentCandidate}?v=${TEAM_MEDIA_VERSION}`;
-  });
-}
-
 function hideTeamFlash() {
   teamFlash.classList.remove("is-visible");
   teamFlash.classList.remove("has-video");
@@ -521,7 +501,47 @@ function hideTeamFlash() {
   document.body.classList.remove("has-team-flash");
 }
 
-async function showTeamFlash(teamKey) {
+function playTeamFlashVideo(videoCandidates, requestId, candidateIndex = 0) {
+  const candidate = videoCandidates[candidateIndex];
+
+  if (!candidate) {
+    teamFlashTimeoutId = window.setTimeout(() => {
+      if (requestId !== teamFlashRequestId) {
+        return;
+      }
+
+      hideTeamFlash();
+    }, 3000);
+    return;
+  }
+
+  const videoSrc = `${candidate}?v=${TEAM_MEDIA_VERSION}`;
+  teamFlashVideo.onerror = () => {
+    if (requestId !== teamFlashRequestId) {
+      return;
+    }
+
+    playTeamFlashVideo(videoCandidates, requestId, candidateIndex + 1);
+  };
+  teamFlashVideo.onended = () => {
+    if (requestId !== teamFlashRequestId) {
+      return;
+    }
+
+    hideTeamFlash();
+  };
+  teamFlashVideo.src = videoSrc;
+  teamFlashVideo.load();
+  teamFlashVideo.play().catch(() => {
+    if (requestId !== teamFlashRequestId) {
+      return;
+    }
+
+    playTeamFlashVideo(videoCandidates, requestId, candidateIndex + 1);
+  });
+}
+
+function showTeamFlash(teamKey) {
   const team = weddingConfig.teams[teamKey];
 
   if (!team || !teamFlash) {
@@ -548,28 +568,7 @@ async function showTeamFlash(teamKey) {
   teamFlash.setAttribute("aria-hidden", "false");
   document.body.classList.add("has-team-flash");
   createTeamFireworks();
-
-  const resolvedVideo = await loadVideoCandidate(team.videoCandidates || []);
-  if (requestId !== teamFlashRequestId) {
-    return;
-  }
-
-  if (resolvedVideo) {
-    teamFlashVideo.src = `${resolvedVideo}?v=${TEAM_MEDIA_VERSION}`;
-    teamFlashVideo.onended = () => {
-      if (requestId !== teamFlashRequestId) {
-        return;
-      }
-
-      hideTeamFlash();
-    };
-    teamFlashVideo.play().catch(() => {});
-    return;
-  }
-
-  teamFlashTimeoutId = window.setTimeout(() => {
-    hideTeamFlash();
-  }, 3000);
+  playTeamFlashVideo(team.videoCandidates || [], requestId);
 }
 
 function setupTeamChoice() {
