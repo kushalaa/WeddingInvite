@@ -7,7 +7,7 @@ const weddingConfig = {
       label: "Team Bride",
       name: "Kushalaa",
       initials: "K",
-      videoCandidates: ["./assets/team-bride.mov", "./assets/team-bride.mp4"],
+      videoCandidates: ["./assets/team-bride.mp4", "./assets/team-bride.mov"],
       imageCandidates: [
         "./assets/team-bride.jpg",
         "./assets/team-bride.jpeg",
@@ -19,7 +19,7 @@ const weddingConfig = {
       label: "Team Groom",
       name: "Sharath",
       initials: "S",
-      videoCandidates: ["./assets/team-groom.mov", "./assets/team-groom.mp4"],
+      videoCandidates: ["./assets/team-groom.mp4", "./assets/team-groom.mov"],
       imageCandidates: [
         "./assets/team-groom.jpg",
         "./assets/team-groom.jpeg",
@@ -86,7 +86,7 @@ const weddingConfig = {
   ]
 };
 
-const TEAM_MEDIA_VERSION = "20260318-100900";
+const TEAM_MEDIA_VERSION = "20260321-091600";
 
 const timeline = document.querySelector("#timeline");
 const mapEmbed = document.querySelector("#map-embed");
