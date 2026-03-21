@@ -86,7 +86,7 @@ const weddingConfig = {
   ]
 };
 
-const TEAM_MEDIA_VERSION = "20260321-091600";
+const TEAM_MEDIA_VERSION = "20260321-123500";
 
 const timeline = document.querySelector("#timeline");
 const mapEmbed = document.querySelector("#map-embed");
