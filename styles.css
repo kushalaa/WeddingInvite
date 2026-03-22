@@ -471,7 +471,7 @@ textarea {
 .our-story-section {
   position: relative;
   z-index: 1;
-  min-height: 390vh;
+  min-height: 900vh;
   padding: 0;
   background-color: #170103;
   background:
@@ -1880,7 +1880,7 @@ h2 {
   }
 
   .our-story-section {
-    min-height: 320vh;
+    min-height: 700vh;
   }
 
   .our-story-header {
