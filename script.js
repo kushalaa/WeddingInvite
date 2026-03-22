@@ -97,6 +97,7 @@ const openingSpotlight = document.querySelector("#top");
 const openingBeam = document.querySelector(".opening-beam");
 const filmSection = document.querySelector("#film");
 const filmVideo = document.querySelector("#film-video");
+const moonlightVideo = document.querySelector("#moonlight-video");
 const ourStorySection = document.querySelector("#our-story");
 const ourStoryTitle = document.querySelector("#our-story-title");
 const storyGalleryTrack = document.querySelector("#story-gallery-track");
@@ -447,6 +448,36 @@ function setupCountdown() {
   window.setInterval(updateCountdown, 60000);
 }
 
+function setupAmbientVideoPlayback() {
+  if (!moonlightVideo) {
+    return;
+  }
+
+  const tryPlayMoonlightVideo = () => {
+    moonlightVideo.play().catch(() => {});
+  };
+
+  tryPlayMoonlightVideo();
+  moonlightVideo.addEventListener("loadeddata", tryPlayMoonlightVideo);
+  window.addEventListener("pointerdown", tryPlayMoonlightVideo, { once: true, passive: true });
+  window.addEventListener("touchstart", tryPlayMoonlightVideo, { once: true, passive: true });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tryPlayMoonlightVideo();
+        } else {
+          moonlightVideo.pause();
+        }
+      });
+    },
+    { threshold: 0.35 }
+  );
+
+  observer.observe(moonlightVideo);
+}
+
 function setupAudioToggle() {
   let isPlaying = false;
   let hasPrimedAutoPlay = false;
@@ -635,6 +666,7 @@ setupParallaxCards();
 setupScrollProgress();
 setupSectionRail();
 setupCountdown();
+setupAmbientVideoPlayback();
 setupAudioToggle();
 setupOurStoryScroll();
 setupTeamChoice();
