@@ -1875,73 +1875,20 @@ h2 {
   }
 
   .our-story-sticky {
-    position: relative;
-    min-height: auto;
     align-items: start;
     padding-top: 5rem;
-    padding-bottom: 3rem;
   }
 
   .our-story-section {
-    min-height: auto;
+    min-height: 820vh;
   }
 
   .our-story-header {
     position: relative;
     left: auto;
     top: auto;
-    transform: none;
-    opacity: 1;
+    transform: translateY(calc(var(--story-title-shift, 0px) * 0.6));
     margin-bottom: 2rem;
-  }
-
-  .story-gallery-shell {
-    opacity: 1;
-    transform: none;
-    overflow: visible;
-  }
-
-  .story-gallery-track {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-    padding: 0;
-    gap: 1.5rem;
-    transform: none;
-  }
-
-  .story-card,
-  .story-card-feature,
-  .story-card-tall {
-    width: min(100%, 28rem);
-    margin: 0 auto;
-    transform: none;
-  }
-
-  .story-card:nth-child(odd),
-  .story-card:nth-child(1),
-  .story-card:nth-child(2),
-  .story-card:nth-child(3),
-  .story-card:nth-child(4),
-  .story-card:nth-child(5),
-  .story-card:nth-child(6),
-  .story-card:nth-child(7),
-  .story-card:nth-child(8),
-  .story-card:nth-child(9),
-  .story-card:nth-child(10),
-  .story-card:nth-child(11),
-  .story-card:nth-child(12),
-  .story-card:nth-child(13),
-  .story-card:nth-child(14),
-  .story-card:nth-child(15),
-  .story-card:nth-child(16),
-  .story-card:nth-child(17) {
-    margin-top: 0;
-    transform: none;
-  }
-
-  .story-card-spacer {
-    display: none;
   }
 
   .hero {
@@ -2056,8 +2003,13 @@ h2 {
     padding-right: 1.25rem;
   }
 
+  .our-story-section {
+    min-height: 920vh;
+  }
+
   .story-gallery-shell {
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .story-card {

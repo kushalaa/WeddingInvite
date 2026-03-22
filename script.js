@@ -98,6 +98,9 @@ const openingBeam = document.querySelector(".opening-beam");
 const filmSection = document.querySelector("#film");
 const filmVideo = document.querySelector("#film-video");
 const moonlightVideo = document.querySelector("#moonlight-video");
+const ambientVideos = document.querySelectorAll(
+  "#film-video, #moonlight-video, .schedule-media-video, .location-copy-video"
+);
 const ourStorySection = document.querySelector("#our-story");
 const ourStoryTitle = document.querySelector("#our-story-title");
 const storyGalleryTrack = document.querySelector("#story-gallery-track");
@@ -383,20 +386,8 @@ function setupOpeningSequence() {
 
 function setupOurStoryScroll() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const mobileStoryLayout = window.matchMedia("(max-width: 960px)");
 
   function updateStoryMotion() {
-    if (mobileStoryLayout.matches) {
-      ourStorySection.style.setProperty("--story-title-shift", "0px");
-      ourStorySection.style.setProperty("--story-title-opacity", "1");
-      ourStorySection.style.setProperty("--story-gallery-opacity", "1");
-      ourStorySection.style.setProperty("--story-gallery-shift", "0px");
-      ourStorySection.style.setProperty("--story-track-offset", "0px");
-      ourStorySection.style.setProperty("--story-card-lift", "0px");
-      ourStorySection.style.setProperty("--story-thread-progress", "1");
-      return;
-    }
-
     const sectionRect = ourStorySection.getBoundingClientRect();
     const sectionHeight = Math.max(ourStorySection.offsetHeight - window.innerHeight, 1);
     const rawProgress = Math.min(Math.max(-sectionRect.top / sectionHeight, 0), 1);
@@ -449,33 +440,49 @@ function setupCountdown() {
 }
 
 function setupAmbientVideoPlayback() {
-  if (!moonlightVideo) {
+  if (!ambientVideos.length) {
     return;
   }
 
-  const tryPlayMoonlightVideo = () => {
-    moonlightVideo.play().catch(() => {});
+  const tryPlayVideo = (video) => {
+    video.play().catch(() => {});
   };
 
-  tryPlayMoonlightVideo();
-  moonlightVideo.addEventListener("loadeddata", tryPlayMoonlightVideo);
-  window.addEventListener("pointerdown", tryPlayMoonlightVideo, { once: true, passive: true });
-  window.addEventListener("touchstart", tryPlayMoonlightVideo, { once: true, passive: true });
+  const kickAmbientVideos = () => {
+    ambientVideos.forEach((video) => {
+      tryPlayVideo(video);
+    });
+  };
+
+  kickAmbientVideos();
+
+  ambientVideos.forEach((video) => {
+    video.addEventListener("loadeddata", () => {
+      tryPlayVideo(video);
+    });
+  });
+
+  window.addEventListener("pointerdown", kickAmbientVideos, { once: true, passive: true });
+  window.addEventListener("touchstart", kickAmbientVideos, { once: true, passive: true });
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
+        const video = entry.target;
+
         if (entry.isIntersecting) {
-          tryPlayMoonlightVideo();
+          tryPlayVideo(video);
         } else {
-          moonlightVideo.pause();
+          video.pause();
         }
       });
     },
     { threshold: 0.35 }
   );
 
-  observer.observe(moonlightVideo);
+  ambientVideos.forEach((video) => {
+    observer.observe(video);
+  });
 }
 
 function setupAudioToggle() {
