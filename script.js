@@ -382,8 +382,20 @@ function setupOpeningSequence() {
 
 function setupOurStoryScroll() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mobileStoryLayout = window.matchMedia("(max-width: 960px)");
 
   function updateStoryMotion() {
+    if (mobileStoryLayout.matches) {
+      ourStorySection.style.setProperty("--story-title-shift", "0px");
+      ourStorySection.style.setProperty("--story-title-opacity", "1");
+      ourStorySection.style.setProperty("--story-gallery-opacity", "1");
+      ourStorySection.style.setProperty("--story-gallery-shift", "0px");
+      ourStorySection.style.setProperty("--story-track-offset", "0px");
+      ourStorySection.style.setProperty("--story-card-lift", "0px");
+      ourStorySection.style.setProperty("--story-thread-progress", "1");
+      return;
+    }
+
     const sectionRect = ourStorySection.getBoundingClientRect();
     const sectionHeight = Math.max(ourStorySection.offsetHeight - window.innerHeight, 1);
     const rawProgress = Math.min(Math.max(-sectionRect.top / sectionHeight, 0), 1);
