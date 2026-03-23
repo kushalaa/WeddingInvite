@@ -386,17 +386,17 @@ function setupOpeningSequence() {
 
 function setupOurStoryScroll() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let currentProgress = 0;
+  let targetProgress = 0;
+  let animationFrameId = 0;
 
-  function updateStoryMotion() {
-    const sectionRect = ourStorySection.getBoundingClientRect();
-    const sectionHeight = Math.max(ourStorySection.offsetHeight - window.innerHeight, 1);
-    const rawProgress = Math.min(Math.max(-sectionRect.top / sectionHeight, 0), 1);
-    const titleExitProgress = Math.min(rawProgress / 0.2, 1);
-    const galleryRevealStart = 0.2;
+  function applyStoryMotion(progress) {
+    const titleExitProgress = Math.min(progress / 0.14, 1);
+    const galleryRevealStart = 0.14;
     const galleryProgress =
-      rawProgress <= galleryRevealStart
+      progress <= galleryRevealStart
         ? 0
-        : Math.min((rawProgress - galleryRevealStart) / (1 - galleryRevealStart), 1);
+        : Math.min((progress - galleryRevealStart) / (1 - galleryRevealStart), 1);
     const titleShift = prefersReducedMotion ? 0 : titleExitProgress * -120;
     const titleOpacity = prefersReducedMotion ? 1 : 1 - titleExitProgress;
     const galleryOpacity = prefersReducedMotion ? 1 : Math.min(galleryProgress * 1.85, 1);
@@ -413,6 +413,37 @@ function setupOurStoryScroll() {
     ourStorySection.style.setProperty("--story-track-offset", `${trackOffset}px`);
     ourStorySection.style.setProperty("--story-card-lift", `${cardLift}px`);
     ourStorySection.style.setProperty("--story-thread-progress", `${galleryProgress}`);
+  }
+
+  function animateStoryMotion() {
+    const difference = targetProgress - currentProgress;
+
+    if (Math.abs(difference) < 0.001) {
+      currentProgress = targetProgress;
+      applyStoryMotion(currentProgress);
+      animationFrameId = 0;
+      return;
+    }
+
+    currentProgress += difference * 0.14;
+    applyStoryMotion(currentProgress);
+    animationFrameId = window.requestAnimationFrame(animateStoryMotion);
+  }
+
+  function updateStoryMotion() {
+    const sectionRect = ourStorySection.getBoundingClientRect();
+    const sectionHeight = Math.max(ourStorySection.offsetHeight - window.innerHeight, 1);
+    targetProgress = Math.min(Math.max(-sectionRect.top / sectionHeight, 0), 1);
+
+    if (prefersReducedMotion) {
+      currentProgress = targetProgress;
+      applyStoryMotion(currentProgress);
+      return;
+    }
+
+    if (!animationFrameId) {
+      animationFrameId = window.requestAnimationFrame(animateStoryMotion);
+    }
   }
 
   updateStoryMotion();
