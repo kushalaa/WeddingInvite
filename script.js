@@ -399,6 +399,9 @@ function setupOurStoryScroll() {
         : Math.min((progress - galleryRevealStart) / (1 - galleryRevealStart), 1);
     const titleShift = prefersReducedMotion ? 0 : titleExitProgress * -120;
     const titleOpacity = prefersReducedMotion ? 1 : 1 - titleExitProgress;
+    const copyExitProgress = Math.min(progress / 0.2, 1);
+    const copyShift = prefersReducedMotion ? 0 : copyExitProgress * 58;
+    const copyOpacity = prefersReducedMotion ? 1 : Math.max(1 - copyExitProgress * 1.18, 0);
     const galleryOpacity = prefersReducedMotion ? 1 : Math.min(galleryProgress * 1.85, 1);
     const galleryShift = prefersReducedMotion ? 0 : (1 - galleryProgress) * 28;
     const startOffset = Math.min(window.innerWidth * 0.18, 180);
@@ -406,8 +409,12 @@ function setupOurStoryScroll() {
     const trackOffset = prefersReducedMotion ? 0 : startOffset - galleryProgress * travelDistance;
     const cardLift = prefersReducedMotion ? 0 : galleryProgress * 26;
 
-    ourStorySection.style.setProperty("--story-title-shift", `${titleShift}px`);
-    ourStorySection.style.setProperty("--story-title-opacity", `${titleOpacity}`);
+    ourStorySection.style.setProperty("--story-title-shift", "0px");
+    ourStorySection.style.setProperty("--story-title-opacity", "1");
+    ourStorySection.style.setProperty("--story-heading-shift", `${titleShift}px`);
+    ourStorySection.style.setProperty("--story-heading-opacity", `${titleOpacity}`);
+    ourStorySection.style.setProperty("--story-copy-shift", `${copyShift}px`);
+    ourStorySection.style.setProperty("--story-copy-opacity", `${copyOpacity}`);
     ourStorySection.style.setProperty("--story-gallery-opacity", `${galleryOpacity}`);
     ourStorySection.style.setProperty("--story-gallery-shift", `${galleryShift}px`);
     ourStorySection.style.setProperty("--story-track-offset", `${trackOffset}px`);
