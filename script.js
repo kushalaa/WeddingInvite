@@ -475,26 +475,33 @@ function setupAmbientVideoPlayback() {
     return;
   }
 
+  const visibleVideos = new Set();
+
   const tryPlayVideo = (video) => {
     video.play().catch(() => {});
   };
 
-  const kickAmbientVideos = () => {
-    ambientVideos.forEach((video) => {
+  const pauseVideo = (video) => {
+    video.pause();
+  };
+
+  const kickVisibleAmbientVideos = () => {
+    visibleVideos.forEach((video) => {
       tryPlayVideo(video);
     });
   };
 
-  kickAmbientVideos();
-
   ambientVideos.forEach((video) => {
     video.addEventListener("loadeddata", () => {
-      tryPlayVideo(video);
+      if (visibleVideos.has(video)) {
+        tryPlayVideo(video);
+      }
     });
+    pauseVideo(video);
   });
 
-  window.addEventListener("pointerdown", kickAmbientVideos, { once: true, passive: true });
-  window.addEventListener("touchstart", kickAmbientVideos, { once: true, passive: true });
+  window.addEventListener("pointerdown", kickVisibleAmbientVideos, { once: true, passive: true });
+  window.addEventListener("touchstart", kickVisibleAmbientVideos, { once: true, passive: true });
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -502,13 +509,15 @@ function setupAmbientVideoPlayback() {
         const video = entry.target;
 
         if (entry.isIntersecting) {
+          visibleVideos.add(video);
           tryPlayVideo(video);
         } else {
-          video.pause();
+          visibleVideos.delete(video);
+          pauseVideo(video);
         }
       });
     },
-    { threshold: 0.35 }
+    { threshold: 0.55 }
   );
 
   ambientVideos.forEach((video) => {
