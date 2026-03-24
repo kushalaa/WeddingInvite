@@ -335,6 +335,18 @@ textarea {
   height: 100%;
 }
 
+.film-video::-webkit-media-controls,
+.film-video::-webkit-media-controls-start-playback-button,
+.moonlight-video::-webkit-media-controls,
+.moonlight-video::-webkit-media-controls-start-playback-button,
+.schedule-media-video::-webkit-media-controls,
+.schedule-media-video::-webkit-media-controls-start-playback-button,
+.location-copy-video::-webkit-media-controls,
+.location-copy-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 .film-video {
   object-fit: cover;
   object-position: center center;

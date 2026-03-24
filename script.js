@@ -499,6 +499,9 @@ function setupAmbientVideoPlayback() {
   };
 
   ambientVideos.forEach((video) => {
+    video.controls = false;
+    video.muted = true;
+    video.playsInline = true;
     video.addEventListener("loadeddata", () => {
       if (visibleVideos.has(video)) {
         tryPlayVideo(video);
@@ -509,6 +512,7 @@ function setupAmbientVideoPlayback() {
 
   window.addEventListener("pointerdown", kickVisibleAmbientVideos, { once: true, passive: true });
   window.addEventListener("touchstart", kickVisibleAmbientVideos, { once: true, passive: true });
+  window.addEventListener("click", kickVisibleAmbientVideos, { once: true, passive: true });
 
   const observer = new IntersectionObserver(
     (entries) => {
